@@ -16,8 +16,8 @@ jobs:
           configuration: '{ "method": "GET", "encoding": "utf-8" }'
           
       - name: Update resources
-              uses: test-room-7/action-update-file@v1
-              with:
-                  file-path: fetch-api-data-action/data.json
-                  commit-msg: Update resources
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
+        uses: test-room-7/action-update-file@v1
+        with:
+          file-path: fetch-api-data-action/data.json
+          commit-msg: Update resources
+          github-token: ${{ secrets.GITHUB_TOKEN }}
