@@ -1,0 +1,47 @@
+name: Update Data from API
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs daily, adjust as needed
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install axios
+
+      - name: Update Data from API
+        env:
+          GH_PAT: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Replace with your API endpoint
+          API_ENDPOINT="http://data.phishtank.com/data/online-valid.json"
+
+          # Fetch data from the API
+          DATA=$(curl -s $API_ENDPOINT)
+
+          # Commit data to a file
+          echo "$DATA" > data.json
+
+          # Configure Git
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+          # Commit and push the changes
+          git add data.json
+          git commit -m "Update data from API"
+          git push
+
+      - name: Complete
+        run: echo "Data update completed"
