@@ -13,4 +13,4 @@ jobs:
         uses: JamesIves/fetch-api-data-action@v2
         with:
           endpoint: http://data.phishtank.com/data/online-valid.json
-          configuration: '{ "method": "GET" }'
+          configuration: '{ "method": "GET", "encoding": "utf-8" }'
