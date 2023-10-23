@@ -23,25 +23,29 @@ jobs:
 
       - name: Update Data from API
         env:
-          GH_PAT: ${{ secrets.GITHUB_TOKEN }}
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           # Replace with your API endpoint
-          API_ENDPOINT="http://data.phishtank.com/data/online-valid.json"
+          API_ENDPOINT="https://example.com/api/data"
+      
+          # Fetch data from the API and echo the status code
+          STATUS_CODE=$(curl -s -w "%{http_code}" -o data.json $API_ENDPOINT)
+          echo "HTTP Status Code: $STATUS_CODE"
+      
+          # Check if the request was successful (status code 200)
+          if [ "$STATUS_CODE" -eq 200 ]; then
+            # Configure Git
+            git config --local user.email "action@github.com"
+            git config --local user.name "GitHub Action"
+      
+            # Commit and push the changes
+            git add data.json
+            git commit -m "Update data from API"
+            git push
+          else
+            echo "API request failed with status code $STATUS_CODE"
+          fi
 
-          # Fetch data from the API
-          DATA=$(curl -s $API_ENDPOINT)
-
-          # Commit data to a file
-          echo "$DATA" > data.json
-
-          # Configure Git
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-
-          # Commit and push the changes
-          git add data.json
-          git commit -m "Update data from API"
-          git push
 
       - name: Complete
         run: echo "Data update completed"
