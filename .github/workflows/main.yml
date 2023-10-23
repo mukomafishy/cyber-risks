@@ -13,7 +13,7 @@ jobs:
         uses: JamesIves/fetch-api-data-action@v2
         with:
           endpoint: http://data.phishtank.com/data/online-valid.json
-          configuration: '{ "method": "GET", "encoding": "utf-8" }'
+          configuration: '{ "method": "GET", "encoding": "utf-8", "set-output": "false" }'
           
       - name: Update resources
         uses: test-room-7/action-update-file@v1
