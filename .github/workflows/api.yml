@@ -26,7 +26,7 @@ jobs:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           # Replace with your API endpoint
-          API_ENDPOINT="https://example.com/api/data"
+          API_ENDPOINT="http://data.phishtank.com/data/online-valid.json"
       
           # Fetch data from the API and echo the status code
           STATUS_CODE=$(curl -s -w "%{http_code}" -o data.json $API_ENDPOINT)
