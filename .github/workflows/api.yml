@@ -28,8 +28,12 @@ jobs:
           # Replace with your API endpoint
           API_ENDPOINT="http://data.phishtank.com/data/online-valid.json"
       
-          # Fetch data from the API and echo the status code
-          STATUS_CODE=$(curl -s -w "%{http_code}" -o data.json $API_ENDPOINT)
+          # Fetch data from the API, follow redirects, and capture the final URL and status code
+          RESPONSE=$(curl -s -L -w "%{http_code} %{url_effective}" -o data.json $API_ENDPOINT)
+          STATUS_CODE=$(echo "$RESPONSE" | awk '{print $1}')
+          FINAL_URL=$(echo "$RESPONSE" | awk '{print $2}')
+      
+          echo "Final URL: $FINAL_URL"
           echo "HTTP Status Code: $STATUS_CODE"
       
           # Check if the request was successful (status code 200)
@@ -43,8 +47,9 @@ jobs:
             git commit -m "Update data from API"
             git push
           else
-            echo "API request failed with status code $STATUS_CODE"
+            echo "API request to $FINAL_URL failed with status code $STATUS_CODE"
           fi
+
 
 
       - name: Complete
